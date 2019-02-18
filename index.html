@@ -65,6 +65,8 @@
 
         function letsGO() {
 
+            document.querySelector("#submit").removeEventListener("click", letsGO);
+
             document.querySelector("img").style.display = "none";
             natHeight = document.querySelector("img").naturalHeight;
             natWidth = document.querySelector("img").naturalWidth;
@@ -157,7 +159,7 @@
                         }
 
                     });
-                    document.querySelector("#container").appendChild(piece); 
+                    document.querySelector("#container").appendChild(piece);
                 }        
 
             }   
