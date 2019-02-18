@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Picture Puzzle</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            display: grid;
+            background-color: beige;
+            background-size: 100%;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        .dropzone {
+            outline: 0.5px solid grey;
+        }     
+
+    </style>
+</head>
+<body class="thisBody">
+
+    <div class="inputs">
+        <input id="x-axis" placeholder="X-axis pieces" type="text">
+        <input id="y-axis" placeholder="Y-axis pieces" type="text">
+        <input id="submit" type="submit">
+    </div>
+    
+    
+    <div id="allPieces"></div>
+
+    
+
+    <div id="container">
+            <img src="" alt="" draggable="true">
+    </div>
+
+    <script>
+        "use strict";
+
+        let dragged;
+
+        let imageAddress = "https://i.kym-cdn.com/photos/images/newsfeed/001/122/098/673.png";
+        
+        let natHeight;
+        let natWidth; 
+        let numberOfXPieces;
+        let numberOfYPieces;
+
+        document.addEventListener("DOMContentLoaded", loadPicture);
+        document.querySelector("#submit").addEventListener("click", letsGO);
+
+        function loadPicture() {
+            document.querySelector("img").src = imageAddress;
+            
+        }
+
+        function letsGO() {
+
+            document.querySelector("img").style.display = "none";
+            natHeight = document.querySelector("img").naturalHeight;
+            natWidth = document.querySelector("img").naturalWidth;
+
+            numberOfXPieces = document.querySelector("#x-axis").value;
+            numberOfYPieces = document.querySelector("#y-axis").value;
+
+
+            const containerWidth = natWidth;
+            const containerHeight = natHeight;
+
+            document.querySelector("#container").style.gridTemplateColumns = `repeat(${numberOfXPieces}, 1fr)`;
+            document.querySelector("#container").style.width = `${containerWidth}px`;
+
+            for (let y = 0; y < numberOfYPieces; y++) {
+                for (let x = 0; x < numberOfXPieces; x++) {
+
+                    let dropzone = document.createElement("div");
+                    dropzone.style.height = (containerHeight / numberOfYPieces) + "px";
+
+                    dropzone.classList.add("dropzone");
+                    dropzone.dataset.dropzone_id = `id${x}${y}`
+
+                    document.querySelector("#container").appendChild(dropzone);
+
+                }
+
+                
+            }
+          
+            for(let y = 0; y < numberOfYPieces; y++ ) {
+                for( let x = 0; x < numberOfXPieces; x++) {
+                    let piece = document.createElement("div");
+                    piece.style.height = (containerHeight / numberOfYPieces) + "px";
+                    piece.style.width = (containerWidth / numberOfXPieces) + "px";
+                    piece.dataset.piece_id = `id${x}${y}`;
+
+                    piece.style.backgroundImage = "url(" + imageAddress + ")";
+                    piece.style.backgroundPosition = `${y * 
+                    (containerWidth / numberOfXPieces)}px ${x *
+                    (containerHeight / numberOfYPieces)}px`;
+
+                    piece.draggable = true;
+
+                    piece.style.position = "absolute";
+                    piece.style.left = Math.random() * 700 + containerWidth + "px";
+                    piece.style.top = Math.random() * containerHeight + "px";
+
+                    document.addEventListener("dragstart", function( event ) {
+                        dragged = event.target;
+                        event.target.style.opacity = .5;
+                    }, false);
+
+                    document.addEventListener("dragend", function( event ) {
+                        event.target.style.opacity = "";
+                    }, false);
+
+                    document.addEventListener("dragover", function( event ) {
+                        event.preventDefault();
+                    }, false);
+
+                    document.addEventListener("dragenter", function( event ) {
+                        if ( event.target.className == "dropzone" ) {
+                            event.target.style.background = "purple";
+                        }
+
+                    }, false);
+
+                    document.addEventListener("dragleave", function( event ) {
+                        if ( event.target.className == "dropzone" ) {
+                            event.target.style.background = "";
+                        }
+
+                    }, false);
+
+                    document.addEventListener("drop", function( event ) {
+                        event.preventDefault();
+                        if ( event.target.className == "dropzone" ) {
+                            event.target.style.background = "";
+                            dragged.parentNode.removeChild( dragged );
+                            event.target.appendChild( dragged );
+                            dragged.style.left = event.target.style.left;
+                            dragged.style.top = event.target.style.top;
+                            testIfSolved();
+                        }
+                        if ( event.target.className != "dropzone" ) {
+                            dragged.style.left = event.pageX + "px";
+                            dragged.style.top = event.pageY + "px";
+
+                        }
+
+                    });
+                    document.querySelector("#container").appendChild(piece); 
+                }        
+
+            }   
+            
+        }
+
+    
+                    
+    
+    </script>
+    
+</body>
+</html>
