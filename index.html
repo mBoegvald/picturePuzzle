@@ -45,7 +45,7 @@
         <input id="submit" type="submit">
     </div>  
     <img src="" alt="" draggable="true">
-    
+
     <div id="container">
             
     </div>
@@ -59,6 +59,8 @@
         let natWidth; 
         let numberOfXPieces;
         let numberOfYPieces;
+
+        console.log(document.querySelector(".inputs").style.height);
 
         document.addEventListener("DOMContentLoaded", init);
         
@@ -131,7 +133,7 @@
 
                     piece.style.position = "absolute";
                     piece.style.left = Math.random() * 700 + containerWidth + "px";
-                    piece.style.top = Math.random() * containerHeight + "px";
+                    piece.style.top = Math.random() * containerHeight + 50 + "px";
 
                     document.addEventListener("dragstart", function( event ) {
                         dragged = event.target;
