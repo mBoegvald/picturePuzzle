@@ -24,43 +24,62 @@
             outline: 0.5px solid grey;
         }     
 
+        .inputs {
+            margin: 10px;
+        }
+        input {
+            padding: 5px;
+        }
+        button {
+            padding: 10px;
+        }
+
     </style>
 </head>
 <body class="thisBody">
 
     <div class="inputs">
+        <input id="url" placeholder="Your picture's URL" type="url">
         <input id="x-axis" placeholder="X-axis pieces" type="text">
         <input id="y-axis" placeholder="Y-axis pieces" type="text">
         <input id="submit" type="submit">
-    </div>
+    </div>  
+    <img src="" alt="" draggable="true">
     
-    
-    <div id="allPieces"></div>
-
-    
-
     <div id="container">
-            <img src="" alt="" draggable="true">
+            
     </div>
 
     <script>
         "use strict";
 
         let dragged;
-
-        let imageAddress = "https://i.kym-cdn.com/photos/images/newsfeed/001/122/098/673.png";
-        
+        let imageAddress = "#";
         let natHeight;
         let natWidth; 
         let numberOfXPieces;
         let numberOfYPieces;
 
-        document.addEventListener("DOMContentLoaded", loadPicture);
-        document.querySelector("#submit").addEventListener("click", letsGO);
+        document.addEventListener("DOMContentLoaded", init);
+        
+        function init() {
+            document.querySelector("#submit").addEventListener("click", setVariables);
+        }
+
+        function setVariables() {    
+            numberOfXPieces = document.querySelector("#x-axis").value;
+            numberOfYPieces = document.querySelector("#y-axis").value;
+            imageAddress = document.querySelector("#url").value;
+            document.querySelector("#container").innerHTML = "";
+            
+    
+            loadPicture();
+        }
 
         function loadPicture() {
             document.querySelector("img").src = imageAddress;
-            
+
+            letsGO();  
         }
 
         function letsGO() {
@@ -71,8 +90,7 @@
             natHeight = document.querySelector("img").naturalHeight;
             natWidth = document.querySelector("img").naturalWidth;
 
-            numberOfXPieces = document.querySelector("#x-axis").value;
-            numberOfYPieces = document.querySelector("#y-axis").value;
+            
 
 
             const containerWidth = natWidth;
@@ -160,6 +178,7 @@
 
                     });
                     document.querySelector("#container").appendChild(piece);
+
                 }        
 
             }   
